@@ -1,8 +1,11 @@
 use std::collections::HashSet;
 
 fn main() {
-    let n = 440;
-    println!("{:?}", factorize_simple(n));
+    // let n = 440;
+    // println!("{:?}", factorize_simple(n));
+    // let result = get_total_x(&vec![2, 6], &vec![48, 96]);
+    let result = get_total_x(&vec![2, 4], &vec![16, 32, 96]);
+    println!("{}", result);
 }
 
 fn get_total_x(a: &[i32], b: &[i32]) -> i32 {
@@ -25,22 +28,17 @@ fn get_total_x(a: &[i32], b: &[i32]) -> i32 {
      * 2. All elements in set a should be factors of it.
      */
     for each_possible_item in &possible_result {
-        for each_a in &a_set {
-            if *each_possible_item % each_a != 0 {
-                continue;
-            }
+        if !are_factors_of(*each_possible_item, &a_set) {
+            continue;
         }
 
-        for each_b in &b_set {
-            if *each_b % *each_possible_item != 0 {
-                continue;
-            }
+        if !are_multiples_of(*each_possible_item, &b_set) {
+            continue;
         }
 
         result.insert(*each_possible_item);
     }
 
-    // all numbers in set a should exist in factors
     result.len() as i32
 }
 
@@ -66,6 +64,28 @@ fn get_min(arr: &[i32]) -> i32 {
     min
 }
 
+/* check if all numbers in arr are factors of n */
+fn are_factors_of(n: i32, arr: &HashSet<i32>) -> bool {
+    for each in arr {
+        if n % *each != 0 {
+            return false;
+        }
+    }
+
+    true
+}
+
+/* check if all numbers in arr are multiples of n */
+fn are_multiples_of(n: i32, arr: &HashSet<i32>) -> bool {
+    for each in arr {
+        if *each % n != 0 {
+            return false;
+        }
+    }
+
+    true
+}
+
 fn factorize_simple(n: i32) -> HashSet<i32> {
     let max_factor;
     if n % 2 == 0 {
@@ -73,7 +93,7 @@ fn factorize_simple(n: i32) -> HashSet<i32> {
     } else {
         max_factor = n / 3;
     }
-    let mut factors = HashSet::from([1]);
+    let mut factors = HashSet::from([1, n]);
     for i in 2..=max_factor {
         if n % i == 0 {
             factors.insert(i);
