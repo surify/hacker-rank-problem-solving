@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 fn main() {
     let ranks = climbing_leaderboard(&vec![100, 90, 90, 80], &vec![70, 80, 105]);
     // let ranks = climbing_leaderboard(&vec![100, 100, 50, 40, 40, 20, 10], &vec![5, 25, 50, 120]);
@@ -7,9 +6,7 @@ fn main() {
 }
 
 fn climbing_leaderboard(ranked: &[i32], player: &[i32]) -> Vec<i32> {
-    let unique_ranked: HashSet<i32> = ranked.iter().copied().collect();
-    let mut unique_ranked: Vec<i32> = unique_ranked.iter().copied().collect();
-    unique_ranked.sort(); // leaderboard is reversed
+    let unique_ranked = get_unique_sorted(ranked);
 
     let mut leaderboard_index = 0;
     let mut player_index = 0;
@@ -45,4 +42,19 @@ fn climbing_leaderboard(ranked: &[i32], player: &[i32]) -> Vec<i32> {
     }
 
     player_ranks
+}
+
+
+fn get_unique_sorted(arr: &[i32]) -> Vec<i32> {
+    let mut last_seen = arr[arr.len() - 1];
+    let mut result = vec![last_seen];
+
+    for i in (0..arr.len() - 1).rev() {
+        if arr[i] != last_seen {
+            last_seen = arr[i];
+            result.push(arr[i]);
+        }
+    }
+
+    result
 }
